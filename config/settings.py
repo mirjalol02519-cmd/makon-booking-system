@@ -1,6 +1,8 @@
 import os
+import pymysql
 from pathlib import Path
 from dotenv import load_dotenv
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -127,3 +129,6 @@ CORS_ALLOWED_ORIGINS = [
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+pymysql.install_as_MySQLdb()
