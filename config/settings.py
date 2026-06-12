@@ -96,6 +96,11 @@ DATABASES = {
         'PASSWORD': os.getenv('MYSQLPASSWORD', 'EMXHQDjvIZAmEzOrXOfnYJAQHMcSTVsL'),
         'HOST': os.getenv('MYSQLHOST', 'localhost'),
         'PORT': os.getenv('MYSQLPORT', '3306'),
+        'OPTIONS': {
+            'ssl': {
+                'disabled': True  # Agar Railway ichki tarmog'ida ulanayotgan bo'lsa, SSL muammosini yechadi
+            }
+        }
     }
 }
 
