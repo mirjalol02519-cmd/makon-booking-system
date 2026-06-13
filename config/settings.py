@@ -93,12 +93,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': os.getenv('MYSQLDATABASE', 'railway'),
         'USER': os.getenv('MYSQLUSER', 'root'),
-        'PASSWORD': os.getenv('MYSQLPASSWORD', 'EMXHQDjvIZAmEzOrXOfnYJAQHMcSTVsL'),
-        'HOST': os.getenv('MYSQLHOST', 'localhost'),
+        'PASSWORD': os.getenv('MYSQLPASSWORD', 'ATZthUFYcVnzYvLULUcQNQPxXRvNlIfU'), # To'g'ri parol qo'yildi
+        'HOST': os.getenv('MYSQLHOST', 'mysql.railway.internal'), # Mahalliy o'rniga Railway ichki hosti
         'PORT': os.getenv('MYSQLPORT', '3306'),
         'OPTIONS': {
             'ssl': {
-                'disabled': True  # Agar Railway ichki tarmog'ida ulanayotgan bo'lsa, SSL muammosini yechadi
+                'disabled': True
             }
         }
     }
