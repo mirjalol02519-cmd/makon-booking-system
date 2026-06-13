@@ -31,10 +31,11 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '*',
+    'makontrip.uz',
+    'www.makontrip.uz',
+    'makon-booking-system-production.up.railway.app',
     '127.0.0.1',
     'localhost',
-    'impale-spinal-majority.ngrok-free.dev'
 ]
 
 
