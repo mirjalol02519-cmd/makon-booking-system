@@ -4,6 +4,6 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "python manage.py migrate && gunicorn loyiha_nomi.wsgi:application"
+    "startCommand": "python manage.py migrate && gunicorn config.wsgi:application"
   }
 }
