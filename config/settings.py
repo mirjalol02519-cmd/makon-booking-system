@@ -131,6 +131,7 @@ USE_TZ = True
 
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
@@ -139,7 +140,19 @@ CSRF_TRUSTED_ORIGINS = ['https://api.makontrip.uz']
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://impale-spinal-majority.ngrok-free.dev",
+    'CORS_ALLOWED_ORIGINS',
+    'https://makontrip.netlify.app',
 ]
+
+CORS_ALLOWED_ORIGINS = True
+
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
