@@ -57,9 +57,10 @@ INSTALLED_APPS = [
     'corsheaders', 
 ]
 
-MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  
+MIDDLEWARE = [ 
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',  
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -130,6 +131,10 @@ USE_TZ = True
 
 
 STATIC_URL = 'static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+CSRF_TRUSTED_ORIGINS = ['https://api.makontrip.uz']
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
