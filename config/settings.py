@@ -140,11 +140,12 @@ CSRF_TRUSTED_ORIGINS = ['https://api.makontrip.uz']
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://impale-spinal-majority.ngrok-free.dev",
-    'CORS_ALLOWED_ORIGINS',
-    'https://makontrip.netlify.app',
+    "https://makontrip.netlify.app",
+    "https://makontrip.uz",
 ]
 
-CORS_ALLOWED_ORIGINS = True
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
