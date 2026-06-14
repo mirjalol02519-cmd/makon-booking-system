@@ -5,7 +5,7 @@ def main_menu():
         [
             InlineKeyboardButton(
                 text="🌍 Turlarni ko'rish",
-                web_app=WebAppInfo(url="https://impale-spinal-majority.ngrok-free.dev")
+                web_app=WebAppInfo(url="https://makontrip.uz")
             )
         ],
         [

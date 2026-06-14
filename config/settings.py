@@ -33,6 +33,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'makontrip.uz',
     'www.makontrip.uz',
+    'api.makontrip.uz',
     'makon-booking-system-production.up.railway.app',
     '127.0.0.1',
     'localhost',
