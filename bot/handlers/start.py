@@ -2,8 +2,8 @@ from aiogram import Router, F, types
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 from aiogram.types import ReplyKeyboardRemove
-from keyboards.main import main_menu
-from utils.api import register_user
+from bot.keyboards.main import main_menu
+from bot.utils.api import register_user
 import json
 
 router = Router()
@@ -11,20 +11,21 @@ router = Router()
 
 @router.message(CommandStart())
 async def start_handler(message: Message):
-    # Save user to backend
-    await register_user(
-        telegram_id=message.from_user.id,
-        first_name=message.from_user.first_name,
-        last_name=message.from_user.last_name or "",
-        username=message.from_user.username
-    )
-
+    try:
+        await register_user(
+            telegram_id=message.from_user.id,
+            first_name=message.from_user.first_name,
+            last_name=message.from_user.last_name or "",
+            username=message.from_user.username
+        )
+    except Exception as e:
+        print(f"Backendga saqlashda xato bo'ldi: {e}")
 
     await message.answer(
         f"Assalomu alaykum, {message.from_user.first_name}! 👋\n\n"
         f"Makon trip botiga xush kelibsiz 🌍\n"
         f"Turlar bilan tanishish va bron qilish uchun pastdagi tugmadan foydalaning.",
-        reply_markup=ReplyKeyboardRemove()
+        reply_markup=ReplyKeyboardRemove() 
     )
 
 
