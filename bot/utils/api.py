@@ -5,7 +5,7 @@ from django.db.models import Sum, Count
 from bookings.models import Booking, Passenger
 from tours.models import Tour
 
-BASE_URL = "http://127.0.0.1:8000/api"
+BASE_URL = "https://makon-booking-system-production.up.railway.app/api"
 
 def get_admin_main_stats():
     today = timezone.now().date()
