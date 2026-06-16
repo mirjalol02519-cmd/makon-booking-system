@@ -1,6 +1,7 @@
-from aiogram import Router, F
+from aiogram import Router, F, types
 from aiogram.filters import CommandStart
 from aiogram.types import Message
+from aiogram.types import ReplyKeyboardRemove
 from keyboards.main import main_menu
 from utils.api import register_user
 import json
@@ -22,8 +23,8 @@ async def start_handler(message: Message):
     await message.answer(
         f"Assalomu alaykum, {message.from_user.first_name}! 👋\n\n"
         f"Makon trip botiga xush kelibsiz 🌍\n"
-        f"Quyidagi turlardan birini tanlang:",
-        reply_markup=main_menu()
+        f"Turlar bilan tanishish va bron qilish uchun pastdagi tugmadan foydalaning.",
+        reply_markup=ReplyKeyboardRemove()
     )
 
 
