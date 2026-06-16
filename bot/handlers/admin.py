@@ -8,7 +8,7 @@ from bot.keyboards.main import get_admin_tours_keyboard, get_passengers_keyboard
 
 load_dotenv()
 router = Router()
-ADMIN_ID = list(map(int, os.getenv("ADMIN_IDS", "").split(",")))
+ADMIN_ID = list(map(int, os.getenv("ADMIN_ID", "").split(",")))
 
 @router.message(Command("admin"))
 async def admin_main_menu(message: types.Message):

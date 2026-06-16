@@ -2,7 +2,8 @@ import aiohttp
 import os 
 from django.utils import timezone
 from django.db.models import Sum, Count
-from bookings.models import Booking, Tour, Passenger
+from bookings.models import Booking, Passenger
+from tours.models import Tour
 
 BASE_URL = "http://127.0.0.1:8000/api"
 

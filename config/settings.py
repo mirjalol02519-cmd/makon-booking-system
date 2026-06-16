@@ -111,23 +111,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
-import os
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('MYSQLDATABASE', 'railway'),
-        'USER': os.getenv('MYSQLUSER', 'root'),
-        'PASSWORD': os.getenv('MYSQLPASSWORD', 'ATZthUFYcVnzYvLULUcQNQPxXRvNlIfU'), # To'g'ri parol qo'yildi
-        'HOST': os.getenv('MYSQLHOST', 'mysql.railway.internal'), # Mahalliy o'rniga Railway ichki hosti
-        'PORT': os.getenv('MYSQLPORT', '3306'),
-        'OPTIONS': {
-            'ssl': {
-                'disabled': True
-            }
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('MYSQLDATABASE'),
+            'USER': os.getenv('MYSQLUSER'),
+            'PASSWORD': os.getenv('MYSQLPASSWORD'),
+            'HOST': os.getenv('MYSQLHOST'),
+            'PORT': os.getenv('MYSQLPORT'),
+            'OPTIONS': {'ssl': {'disabled': True}}
         }
     }
-}
 
 
 AUTH_PASSWORD_VALIDATORS = [

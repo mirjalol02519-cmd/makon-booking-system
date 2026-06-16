@@ -17,6 +17,9 @@ class Booking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     use_discount = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f"{self.user} - {self.tour}"
+
 
 class Passenger(models.Model):
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name='passengers')
@@ -25,6 +28,6 @@ class Passenger(models.Model):
 
 
     def __str__(self):
-        return f"{self.user} - {self.tour}"
+        return self.full_name
 
 
