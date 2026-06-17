@@ -33,7 +33,7 @@ def get_admin_main_stats():
             "revenue": revenue,
             "seats_left": seats_left
         })
-        return stats, tours_report
+    return stats, tours_report
 
 
 async def register_user(telegram_id, first_name, last_name, username):
