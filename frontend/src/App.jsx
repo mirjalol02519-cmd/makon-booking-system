@@ -3,7 +3,7 @@ import TourList from './pages/TourList';
 import TourDetail from './pages/TourDetail';
 import Booking from './pages/Booking';
 import MyBookings from './pages/MyBookings';
-import Profile from './components/Profile';
+import Profile from './pages/Profile';
 
 function App() {
   return (
