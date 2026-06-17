@@ -34,7 +34,11 @@ async def admin_main_menu(message: types.Message):
             
         text += "\n\n👇 Batafsil ma'lumot uchun turni tanlang:"
         
-        await message.answer(text=text, reply_markup=get_admin_tours_keyboard(tours_report))
+        await message.answer(
+                    text=text, 
+                    reply_markup=get_admin_tours_keyboard(tours_report),
+                    parse_mode="Markdown"
+                )
 
     except Exception as err:
         await message.answer(f"❌ Admin panel yuklanishida ichki xatolik: {str(err)}")
