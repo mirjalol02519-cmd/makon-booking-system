@@ -151,7 +151,7 @@ export default function Profile() {
           <div className="pf-name">{user.name}</div>
           <div className="pf-phone">{user.phone}</div>
         </div>
-        
+
         {/* Profile Menu */}
         <div className="pf-menu">
           
