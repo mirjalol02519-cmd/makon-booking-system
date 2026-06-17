@@ -3,6 +3,7 @@ import TourList from './pages/TourList';
 import TourDetail from './pages/TourDetail';
 import Booking from './pages/Booking';
 import MyBookings from './pages/MyBookings';
+import Profile from './components/Profile';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/tour/:id" element={<TourDetail />} />
         <Route path="/booking/:id" element={<Booking />} />
         <Route path="/my-bookings" element={<MyBookings />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );
