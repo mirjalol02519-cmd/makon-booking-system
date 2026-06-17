@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from aiogram import Router, F, types
 from aiogram.filters import Command
+from asgiref.sync import sync_to_async
 from bot.utils.api import get_admin_main_stats, get_passengers_by_tour, get_passenger_detail
 from bot.keyboards.main import get_admin_tours_keyboard, get_passengers_keyboard, get_back_to_passengers_keyboard
 
@@ -21,7 +22,7 @@ async def admin_main_menu(message: types.Message):
         return
 
     try:
-        stats, tours_report = get_admin_main_stats()
+        stats, tours_report = await sync_to_async(get_admin_main_stats)()
         
         text = f"📊 **ADMIN STATISTIKA** (Sana: {stats.get('date', 'Bugun')})\n\n"
         text += f"• **Umumiy bronlar:** {stats['total_bookings']} ta\n"
