@@ -8,26 +8,35 @@ from bot.keyboards.main import get_admin_tours_keyboard, get_passengers_keyboard
 
 load_dotenv()
 router = Router()
-ADMIN_ID = list(map(int, os.getenv("ADMIN_ID", "").split(",")))
+
+raw_admin_ids = os.getenv("ADMIN_ID", "").strip()
+if raw_admin_ids:
+    ADMIN_ID = [int(i.strip()) for i in raw_admin_ids.split(",") if i.strip().isdigit()]
+else:
+    ADMIN_ID = []
 
 @router.message(Command("admin"))
 async def admin_main_menu(message: types.Message):
     if message.from_user.id not in ADMIN_ID:
         return
 
-    stats, tours_report = get_admin_main_stats()
-    
-    text = f"📊 **ADMIN STATISTIKA** (Sana: {stats.get('date', 'Bugun')})\n\n"
-    text += f"• **Umumiy bronlar:** {stats['total_bookings']} ta\n"
-    text += f"• **Umumiy tushum:** {stats['total_revenue'] or 0} so'm\n\n"
-    text += "🏔 **Turlar bo'yicha hisobot:**\n"
-    
-    for t in tours_report:
-        text += f"\n🔹 {t['title']}: {t['bookings']} ta bron | {t['revenue']} so'm | O'rin: {t['seats_left']}"
+    try:
+        stats, tours_report = get_admin_main_stats()
         
-    text += "\n\n👇 Batafsil ma'lumot uchun turni tanlang:"
-    
-    await message.answer(text=text, reply_markup=get_admin_tours_keyboard(tours_report))
+        text = f"📊 **ADMIN STATISTIKA** (Sana: {stats.get('date', 'Bugun')})\n\n"
+        text += f"• **Umumiy bronlar:** {stats['total_bookings']} ta\n"
+        text += f"• **Umumiy tushum:** {stats['total_revenue'] or 0} so'm\n\n"
+        text += "🏔 **Turlar bo'yicha hisobot:**\n"
+        
+        for t in tours_report:
+            text += f"\n🔹 {t['title']}: {t['bookings']} ta bron | {t['revenue']} so'm | O'rin: {t['seats_left']}"
+            
+        text += "\n\n👇 Batafsil ma'lumot uchun turni tanlang:"
+        
+        await message.answer(text=text, reply_markup=get_admin_tours_keyboard(tours_report))
+
+    except Exception as err:
+        await message.answer(f"❌ Admin panel yuklanishida ichki xatolik: {str(err)}")
 
 
 @router.callback_query(F.data.startswith("admin_tour_"))
