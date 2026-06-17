@@ -1,21 +1,18 @@
-export const IS_PRODUCTION = false;
+export const IS_PRODUCTION = true; 
 
 export const getApiUrl = () => {
   return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://127.0.0.1:8000'
-    : window.location.origin; 
+    : 'https://api.makontrip.uz';
 };
 
 export const getImageUrl = (imagePath) => {
   if (!imagePath) return null;
-  
   if (imagePath.startsWith('http')) return imagePath;
   
   const baseUrl = getApiUrl();
   return `${baseUrl}${imagePath}`;
 };
-
-
 
 export const PAYMENT_CONFIG = {
   click: {
