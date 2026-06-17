@@ -119,10 +119,9 @@ const styles = `
 export default function Profile() {
   const navigate = useNavigate();
   
-  // Haqiqiy Telegram WebApp'dan foydalanuvchi ma'lumotlarini olish (agar ishlatilayotgan bo'lsa)
   const [user, setUser] = useState({
-    name: "Sohibjon", // Default sinov uchun ma'lumot
-    phone: "+998 90 123 45 67",
+    name: "Foydalanuvchi", 
+    phone: "   ",
     isClubMember: true
   });
 
@@ -152,9 +151,11 @@ export default function Profile() {
           <div className="pf-name">{user.name}</div>
           <div className="pf-phone">{user.phone}</div>
         </div>
-
+        
         {/* Profile Menu */}
         <div className="pf-menu">
+          
+          {/* 1. Mening bronlarim */}
           <div className="pf-menu-item" onClick={() => navigate('/my-bookings')}>
             <div className="pf-menu-left">
               <span className="pf-menu-icon">📋</span>
@@ -163,6 +164,7 @@ export default function Profile() {
             <span className="pf-menu-sub">Tarix →</span>
           </div>
 
+          {/* 2. Makon Club */}
           <div className="pf-menu-item">
             <div className="pf-menu-left">
               <span className="pf-menu-icon">🎖️</span>
@@ -171,20 +173,23 @@ export default function Profile() {
             <span style={{color: '#C8A96E', fontSize: '12px', fontWeight: 'bold'}}>Faol</span>
           </div>
 
-          <div className="pf-menu-item" onClick={() => window.open('https://t.me/makontrip_support', '_blank')}>
+          {/* 3. Qo'llab-quvvatlash */}
+          <div className="pf-menu-item" onClick={() => window.open('https://t.me/makontrip_admin', '_blank')}>
             <div className="pf-menu-left">
               <span className="pf-menu-icon">💬</span>
               <span className="pf-menu-text">Qo'llab-quvvatlash / Aloqa</span>
             </div>
-            <span className="pf-menu-sub">24/7 →</span>
+            <span className="pf-menu-sub">→</span>
           </div>
           
-          <div className="pf-menu-item" style={{borderColor: '#352222'}} onClick={() => alert('Chiqish bajarildi')}>
+          {/* 4. Ilovani yopish */}
+          <div className="pf-menu-item" style={{borderColor: '#352222'}} onClick={() => window.Telegram?.WebApp?.close()}>
             <div className="pf-menu-left">
               <span className="pf-menu-icon" style={{color: '#FF5A5A'}}>🚪</span>
-              <span className="pf-menu-text" style={{color: '#FF5A5A'}}>Tizimdan chiqish</span>
+              <span className="pf-menu-text" style={{color: '#FF5A5A'}}>Ilovani yopish</span>
             </div>
           </div>
+
         </div>
 
         {/* Navigation Bar */}
