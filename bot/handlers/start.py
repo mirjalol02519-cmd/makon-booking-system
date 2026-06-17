@@ -24,7 +24,7 @@ async def start_handler(message: Message):
     await message.answer(
         f"Assalomu alaykum, {message.from_user.first_name}! 👋\n\n"
         f"Makon trip botiga xush kelibsiz 🌍\n"
-        f"Turlar bilan tanishish va bron qilish uchun pastdagi tugmadan foydalaning 👇",
+        f"Turlar bilan tanishish va bron qilish uchun pastdagi tugmadan foydalaning \n 👇",
         reply_markup=ReplyKeyboardRemove() 
     )
 
