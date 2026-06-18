@@ -6,20 +6,28 @@ import { getImageUrl } from '../config';
 const styles = `
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
+  /* Asosiy fon butun ekranni qoplaydi */
   .tl-root {
     font-family: 'DM Sans', sans-serif;
     background: #0D0D12;
     min-height: 100vh;
     color: #F0EDE6;
-    max-width: 430px;
-    margin: 0 auto;
     position: relative;
     overflow-x: hidden;
     overflow-y: auto;
+    padding-bottom: 100px; /* Navigatsiya uchun joy */
+  }
+
+  /* 💡 RESPONSIVE CONTAINER: Kontentni max-width ichida ushlab, markazlashtiradi */
+  .tl-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 20px;
   }
 
   .tl-header {
-    padding: 20px 20px 0;
+    padding: 20px 0 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -31,36 +39,69 @@ const styles = `
   .tl-logo-text { font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 600; color: #F0EDE6; line-height: 1.2; }
   .tl-logo-sub { font-size: 11px; color: #8A8580; }
 
-  .tl-search { margin: 20px 20px 14px; position: relative; }
+  /* Qidiruv qutisi katta ekranda juda cho'zilib ketmasligi uchun max-width berdik */
+  .tl-search { 
+    margin: 20px 0 24px; 
+    position: relative; 
+    max-width: 450px;
+  }
   .tl-search input { width: 100%; background: #1A1A22; border: 1px solid #2A2A35; border-radius: 12px; padding: 12px 16px 12px 44px; font-size: 14px; color: #F0EDE6; outline: none; }
   .tl-search input:focus { border-color: #C8A96E; }
   .tl-search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #5A5A65; font-size: 18px; }
 
-  .tl-list { padding: 0 20px 120px; display: flex; flex-direction: column; gap: 12px; }
-  .tl-card { background: #1A1A22; border: 1px solid #2A2A35; border-radius: 16px; overflow: hidden; display: flex; cursor: pointer; transition: transform 0.15s; }
+  /* 💡 YANGI RESPONSIVE GRID SETKASI */
+  .tl-list { 
+    display: grid; 
+    grid-template-columns: 1fr; /* Telefonda 1 qator */
+    gap: 16px; 
+    padding-bottom: 40px;
+  }
+
+  .tl-card { background: #1A1A22; border: 1px solid #2A2A35; border-radius: 16px; overflow: hidden; display: flex; cursor: pointer; transition: transform 0.2s, border-color 0.2s; }
+  .tl-card:hover { border-color: #C8A96E; }
   .tl-card:active { transform: scale(0.98); }
-  .tl-card-img { width: 100px; height: 110px; object-fit: cover; flex-shrink: 0; }
-  .tl-card-img-placeholder { width: 100px; height: 110px; background: #22222E; display: flex; align-items: center; justify-content: center; font-size: 30px; }
+  .tl-card-img { width: 110px; height: 120px; object-fit: cover; flex-shrink: 0; }
+  .tl-card-img-placeholder { width: 110px; height: 120px; background: #22222E; display: flex; align-items: center; justify-content: center; font-size: 30px; }
   .tl-card-body { padding: 14px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-  .tl-card-title { font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 600; color: #F0EDE6; }
-  .tl-card-tags { display: flex; gap: 6px; margin-top: 4px; }
-  .tl-tag { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: #22222E; color: #8A8590; }
-  .tl-card-bottom { display: flex; align-items: center; justify-content: space-between; }
+  .tl-card-title { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 600; color: #F0EDE6; line-height: 1.4; }
+  .tl-card-tags { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+  .tl-tag { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: #22222E; color: #8A8590; white-space: nowrap; }
+  .tl-card-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
   .tl-card-price { font-size: 15px; font-weight: 600; color: #C8A96E; font-family: 'Sora', sans-serif; }
   .tl-card-price span { font-size: 11px; color: #6A6A72; }
-  .tl-card-btn { width: 30px; height: 30px; border-radius: 8px; background: rgba(200,169,110,0.15); color: #C8A96E; display: flex; align-items: center; justify-content: center; }
+  .tl-card-btn { width: 32px; height: 32px; border-radius: 8px; background: rgba(200,169,110,0.15); color: #C8A96E; display: flex; align-items: center; justify-content: center; font-weight: bold; transition: background 0.2s; }
+  .tl-card:hover .tl-card-btn { background: #C8A96E; color: #0D0D12; }
 
-  .tl-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: rgba(13,13,18,0.95); backdrop-filter: blur(20px); border-top: 1px solid #2A2A35; display: flex; padding: 10px 0 20px; z-index: 100; }
-  .tl-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
-  .tl-nav-icon { font-size: 22px; color: #5A5A65; }
+  /* Bottom Nav */
+  .tl-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; background: rgba(13,13,18,0.92); backdrop-filter: blur(20px); border-top: 1px solid #2A2A35; display: flex; padding: 12px 0 24px; z-index: 100; }
+  .tl-nav-content { display: flex; width: 100%; max-width: 480px; margin: 0 auto; }
+  .tl-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; position: relative; }
+  .tl-nav-icon { font-size: 22px; color: #5A5A65; transition: color 0.2s; }
   .tl-nav-item.active .tl-nav-icon { color: #C8A96E; }
-  .tl-nav-label { font-size: 10px; color: #5A5A65; }
+  .tl-nav-label { font-size: 10px; color: #5A5A65; transition: color 0.2s; }
   .tl-nav-item.active .tl-nav-label { color: #C8A96E; }
-  .tl-nav-dot { width: 4px; height: 4px; background: #C8A96E; border-radius: 50%; }
+  .tl-nav-dot { width: 4px; height: 4px; background: #C8A96E; border-radius: 50%; margin-top: 2px; }
   
-  .tl-loading { display: flex; justify-content: center; align-items: center; height: 200px; color: #5A5A65; gap: 10px; }
+  .tl-loading { display: flex; justify-content: center; align-items: center; height: 250px; color: #5A5A65; gap: 10px; font-size: 15px; }
   .tl-spinner { width: 24px; height: 24px; border: 2px solid #2A2A35; border-top-color: #C8A96E; border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* 🖥️ MEDIA QUERIES: Planshet va Desktop ekranlar uchun sozlamalar */
+  @media (min-width: 650px) {
+    .tl-list {
+      grid-template-columns: repeat(2, 1fr); /* Planshetda 2 tadan tur yonma-yon */
+    }
+  }
+
+  @media (min-width: 992px) {
+    .tl-list {
+      grid-template-columns: repeat(3, 1fr); /* Kompyuterda 3 tadan tur yonma-yon */
+      gap: 20px;
+    }
+    .tl-header { padding-top: 30px; }
+    .tl-card { flex-direction: column; } /* Katta ekranda rasm tepada, kontent pastda bo'ladi */
+    .tl-card-img, .tl-card-img-placeholder { width: 100%; height: 180px; }
+  }
 `;
 
 function formatPrice(price) {
@@ -89,75 +130,83 @@ function ToursPage() {
     <>
       <style>{styles}</style>
       <div className="tl-root">
-        {/* Header */}
-        <div className="tl-header">
-          <div className="tl-logo">
-            {!logoError ? (
-              <img src="/logo.png" alt="Makon Trip" className="tl-logo-img" onError={() => setLogoError(true)} />
-            ) : (
-              <div className="tl-logo-fallback">MT</div>
-            )}
-            <div>
-              <div className="tl-logo-text">Makon Trip</div>
-              <div className="tl-logo-sub">Barcha faol turlarimiz ro'yxati</div>
+        {/* 💡 YANGI: Butun sahifa elementlarini o'rovchi container */}
+        <div className="tl-container">
+          
+          {/* Header */}
+          <div className="tl-header">
+            <div className="tl-logo">
+              {!logoError ? (
+                <img src="/logo.png" alt="Makon Trip" className="tl-logo-img" onError={() => setLogoError(true)} />
+              ) : (
+                <div className="tl-logo-fallback">MT</div>
+              )}
+              <div>
+                <div className="tl-logo-text">Makon Trip</div>
+                <div className="tl-logo-sub">Barcha faol turlarimiz ro'yxati</div>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Search */}
-        <div className="tl-search">
-          <svg className="tl-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-          <input placeholder="Turlarni qidirish..." value={search} onChange={e => setSearch(e.target.value)} />
-        </div>
+          {/* Search */}
+          <div className="tl-search">
+            <svg className="tl-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input placeholder="Turlarni qidirish..." value={search} onChange={e => setSearch(e.target.value)} />
+          </div>
 
-        {/* List */}
-        {loading ? (
-          <div className="tl-loading"><div className="tl-spinner"></div>Yuklanmoqda...</div>
-        ) : filtered.length === 0 ? (
-          <div style={{textAlign:'center', padding:'40px', color:'#5A5A65'}}>Turlar topilmadi</div>
-        ) : (
-          <div className="tl-list">
-            {filtered.map(tour => {
-              const cardImg = getImageUrl(tour.image);
-              return (
-                <div key={tour.id} className="tl-card" onClick={() => navigate(`/tour/${tour.id}`)}>
-                  {cardImg ? <img src={cardImg} alt={tour.title} className="tl-card-img" /> : <div className="tl-card-img-placeholder">🏞</div>}
-                  <div className="tl-card-body">
-                    <div>
-                      <div className="tl-card-title">{tour.title}</div>
-                      <div className="tl-card-tags">
-                        <span className="tl-tag">🕐 {tour.duration_days} kun</span>
-                        <span className="tl-tag">👥 {tour.max_people} kishi</span>
+          {/* List */}
+          {loading ? (
+            <div className="tl-loading"><div className="tl-spinner"></div>Yuklanmoqda...</div>
+          ) : filtered.length === 0 ? (
+            <div style={{textAlign:'center', padding:'60px', color:'#5A5A65', fontSize: '15px'}}>Turlar topilmadi</div>
+          ) : (
+            <div className="tl-list">
+              {filtered.map(tour => {
+                const cardImg = getImageUrl(tour.image);
+                return (
+                  <div key={tour.id} className="tl-card" onClick={() => navigate(`/tour/${tour.id}`)}>
+                    {cardImg ? <img src={cardImg} alt={tour.title} className="tl-card-img" /> : <div className="tl-card-img-placeholder">🏞</div>}
+                    <div className="tl-card-body">
+                      <div>
+                        <div className="tl-card-title">{tour.title}</div>
+                        <div className="tl-card-tags">
+                          <span className="tl-tag">🕐 {tour.duration_days} kun</span>
+                          <span className="tl-tag">👥 {tour.max_people} kishi</span>
+                        </div>
+                      </div>
+                      <div className="tl-card-bottom">
+                        <div className="tl-card-price">{formatPrice(tour.price)} <span>/ kishi</span></div>
+                        <div className="tl-card-btn">→</div>
                       </div>
                     </div>
-                    <div className="tl-card-bottom">
-                      <div className="tl-card-price">{formatPrice(tour.price)} <span>/ kishi</span></div>
-                      <div className="tl-card-btn">→</div>
-                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Bottom Nav ("Turlar" faol qilingan) */}
-        <nav className="tl-bottom-nav">
-          {[
-            { icon: '🏠', label: 'Asosiy', active: false, onClick: () => navigate('/') },
-            { icon: '🌍', label: 'Turlar', active: true, onClick: () => navigate('/tours') },
-            { icon: '📋', label: 'Bronlar', active: false, onClick: () => navigate('/my-bookings') },
-            { icon: '👤', label: 'Profil', active: false, onClick: () => navigate('/profile') },
-          ].map((item, i) => (
-            <div key={i} className={`tl-nav-item ${item.active ? 'active' : ''}`} onClick={item.onClick}>
-              <span className="tl-nav-icon">{item.icon}</span>
-              <span className="tl-nav-label">{item.label}</span>
-              {item.active && <div className="tl-nav-dot"></div>}
+                );
+              })}
             </div>
-          ))}
+          )}
+
+        </div> {/* 💡 tl-container tugadi */}
+
+        {/* Bottom Nav */}
+        <nav className="tl-bottom-nav">
+          <div className="tl-nav-content">
+            {[
+              { icon: '🏠', label: 'Asosiy', active: false, onClick: () => navigate('/') },
+              { icon: '🌍', label: 'Turlar', active: true, onClick: () => navigate('/tours') },
+              { icon: '📋', label: 'Bronlar', active: false, onClick: () => navigate('/my-bookings') },
+              { icon: '👤', label: 'Profil', active: false, onClick: () => navigate('/profile') },
+            ].map((item, i) => (
+              <div key={i} className={`tl-nav-item ${item.active ? 'active' : ''}`} onClick={item.onClick}>
+                <span className="tl-nav-icon">{item.icon}</span>
+                <span className="tl-nav-label">{item.label}</span>
+                {item.active && <div className="tl-nav-dot"></div>}
+              </div>
+            ))}
+          </div>
         </nav>
+
       </div>
     </>
   );
