@@ -622,7 +622,7 @@ function TourList() {
         <nav className="tl-bottom-nav">
           {[
             { icon: '🏠', label: 'Asosiy', active: true, onClick: () => navigate('/') },
-            { icon: '🌍', label: 'Turlar', active: false, onClick: () => navigate('/') },
+            { icon: '🌍', label: 'Turlar', active: false, onClick: () => navigate('/tours') },
             { icon: '📋', label: 'Bronlar', active: false, onClick: () => navigate('/my-bookings') },
             { icon: '👤', label: 'Profil', active: false, onClick: () => navigate('/profile') },
           ].map((item, i) => (
