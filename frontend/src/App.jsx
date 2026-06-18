@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import TourList from './pages/TourList';
-import ToursPage from './pages/Tourpage';
+import ToursPage from './pages/TourPage';
 import TourDetail from './pages/TourDetail';
 import Booking from './pages/Booking';
 import MyBookings from './pages/MyBookings';
