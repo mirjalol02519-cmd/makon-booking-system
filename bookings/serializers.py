@@ -58,10 +58,17 @@ class BookingSerializer(serializers.ModelSerializer):
     passengers = PassengerSerializer(many=True, required=False)
     total_price = serializers.DecimalField(max_digits=12, decimal_places=2, read_only=True)
     use_discount = serializers.BooleanField(write_only=True, required=False, default=False)
+    
+    tour_title = serializers.CharField(source='tour.title', read_only=True)
+    tour_image = serializers.ImageField(source='tour.image', read_only=True, allow_null=True)
 
     class Meta:
         model = Booking
-        fields = ['id', 'user', 'tour', 'people_count', 'total_price', 'status', 'passengers', 'created_at', 'use_discount']
+        fields = [
+            'id', 'user', 'tour', 'tour_title', 'tour_image', 
+            'people_count', 'total_price', 'status', 'passengers', 
+            'created_at', 'use_discount'
+        ]
 
     def create(self, validated_data):
         passengers_data = validated_data.pop('passengers', [])
