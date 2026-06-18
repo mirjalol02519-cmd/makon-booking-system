@@ -4,6 +4,12 @@ import { getTourDetail } from '../api';
 import axios from 'axios';
 import { getApiUrl, getImageUrl } from '../config';
 
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getTourDetail } from '../api';
+import axios from 'axios';
+import { getApiUrl, getImageUrl } from '../config';
+
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap');
 
@@ -14,12 +20,28 @@ const styles = `
     background: #0D0D12;
     min-height: 100vh;
     color: #F0EDE6;
-    max-width: 430px;
-    margin: 0 auto;
+    width: 100%; 
+  }
+
+  
+  .bk-container {
+    max-width: 1200px; 
+    margin: 0 auto;     
+    padding: 16px;      
+  }
+
+ 
+  @media (min-width: 768px) {
+    .bk-container { padding: 24px; }
+  }
+
+ 
+  @media (min-width: 1024px) {
+    .bk-container { padding: 32px; }
   }
 
   .bk-header {
-    padding: 16px 20px;
+    padding: 16px 0; 
     display: flex;
     align-items: center;
     gap: 12px;
@@ -43,7 +65,7 @@ const styles = `
   /* STEPS */
   .bk-steps {
     display: flex; align-items: center;
-    padding: 20px 20px 0; gap: 0;
+    padding: 20px 0 0; gap: 0;
   }
 
   .bk-step {
@@ -71,7 +93,7 @@ const styles = `
 
   /* TOUR MINI CARD */
   .bk-tour-card {
-    margin: 20px; background: #1A1A22;
+    margin: 20px 0; background: #1A1A22;
     border: 1px solid #2A2A35; border-radius: 14px;
     display: flex; gap: 12px; padding: 12px; align-items: center;
   }
@@ -87,7 +109,19 @@ const styles = `
   .bk-tour-price { font-size: 13px; color: #C8A96E; }
 
   /* CONTENT */
-  .bk-content { padding: 0 20px 120px; }
+  .bk-content { 
+    padding: 0 0 120px; 
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  @media (min-width: 1024px) {
+    .bk-content {
+      grid-template-columns: 1.5fr 1fr; 
+    }
+  }
+
   .bk-step-title { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 600; color: #F0EDE6; margin-bottom: 6px; margin-top: 8px; }
   .bk-step-sub { font-size: 13px; color: #6A6A72; margin-bottom: 24px; }
 
@@ -110,7 +144,7 @@ const styles = `
   .bk-counter-btn.disabled { opacity: 0.3; cursor: not-allowed; }
   .bk-counter-value { font-family: 'Sora', sans-serif; font-size: 42px; font-weight: 600; color: #F0EDE6; min-width: 60px; text-align: center; }
 
-  .bk-summary-box { background: #1A1A22; border: 1px solid #2A2A35; border-radius: 14px; padding: 16px; }
+  .bk-summary-box { background: #1A1A22; border: 1px solid #2A2A35; border-radius: 14px; padding: 16px; height: fit-content; }
   .bk-summary-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 14px; }
   .bk-summary-row:not(:last-child) { border-bottom: 1px solid #1E1E28; }
   .bk-summary-label { color: #7A7A82; }
@@ -176,10 +210,11 @@ const styles = `
   .bk-payment-amount {
     background: rgba(200,169,110,0.08); border: 1px solid rgba(200,169,110,0.2);
     border-radius: 14px; padding: 20px; text-align: center; margin-bottom: 28px;
+    width: 100%; max-width: 400px; margin: 0 auto 28px; 
   }
   .bk-payment-amount-label { font-size: 12px; color: #7A7A82; margin-bottom: 6px; }
   .bk-payment-amount-value { font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 600; color: #C8A96E; }
-  .bk-payment-methods { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+  .bk-payment-methods { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; width: 100%; max-width: 400px; margin: 0 auto; }
 
   .bk-pay-btn {
     display: flex; align-items: center; gap: 16px;
@@ -218,7 +253,17 @@ const styles = `
   .bk-processing h3 { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 600; color: #F0EDE6; }
   .bk-processing p { font-size: 13px; color: #6A6A72; line-height: 1.6; }
 
-  .bk-success { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 40px 20px; text-align: center; }
+
+  .bk-success { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    min-height: 100vh; 
+    padding: 40px 16px; 
+    text-align: center;
+  }
+  
   .bk-success-icon { width: 90px; height: 90px; background: rgba(76,175,130,0.15); border: 2px solid rgba(76,175,130,0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 24px; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
   @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
@@ -226,16 +271,29 @@ const styles = `
 
   .bk-success h2 { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 600; color: #F0EDE6; margin-bottom: 10px; }
   .bk-success p { font-size: 14px; color: #7A7A82; line-height: 1.6; margin-bottom: 12px; }
+  
+
+  .bk-success-box-wrapper {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
   .bk-success-details { background: #1A1A22; border: 1px solid #2A2A35; border-radius: 14px; padding: 16px; width: 100%; margin-bottom: 28px; }
   .bk-success-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px; }
   .bk-success-row:not(:last-child) { border-bottom: 1px solid #1E1E28; }
   .bk-success-row-label { color: #7A7A82; }
   .bk-success-row-value { color: #F0EDE6; font-weight: 500; }
 
-  /* FOOTER */
+  /* FOOTER  */
   .bk-footer {
     position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 100%; max-width: 430px; background: rgba(13,13,18,0.97);
+    width: 100%; 
+    max-width: 1200px; 
+    background: rgba(13,13,18,0.97);
     backdrop-filter: blur(20px); border-top: 1px solid #2A2A35;
     padding: 16px 20px 28px; display: flex; gap: 10px; z-index: 10;
   }
@@ -544,235 +602,248 @@ const handleCreateBooking = async () => {
     <>
       <style>{styles}</style>
       <div className="bk-root">
+        <div className="bk-container">
 
-        {/* Header */}
-        <div className="bk-header">
-          <div className="bk-back" onClick={() => step > 1 ? setStep(s => s-1) : navigate(-1)}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F0EDE6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6"/>
-            </svg>
-          </div>
-          <div className="bk-header-title">Joy bron qilish</div>
-        </div>
-
-        {/* Steps */}
-        <div className="bk-steps">
-          {STEPS.map((label, i) => (
-            <div key={i} style={{ display: 'contents' }}>
-              <div className={`bk-step ${step === i+1 ? 'active' : step > i+1 ? 'done' : ''}`}>
-                <div className="bk-step-circle">{step > i+1 ? '✓' : i+1}</div>
-                <span className="bk-step-label">{label}</span>
-              </div>
-              {i < STEPS.length-1 && (
-                <div className={`bk-step-line ${step > i+1 ? 'done' : ''}`} />
-              )}
+          {/* Header */}
+          <div className="bk-header">
+            <div className="bk-back" onClick={() => step > 1 ? setStep(s => s-1) : navigate(-1)}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F0EDE6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6"/>
+              </svg>
             </div>
-          ))}
-        </div>
-
-        {/* Tour mini card */}
-        <div className="bk-tour-card">
-          {imageUrl ? <img src={imageUrl} alt={tour.title} className="bk-tour-img" /> : <div className="bk-tour-placeholder">🏔</div>}
-          <div>
-            <div className="bk-tour-name">{tour.title}</div>
-            <div className="bk-tour-price">{Number(tour.price).toLocaleString('uz-UZ')} so'm / kishi</div>
+            <div className="bk-header-title">Joy bron qilish</div>
           </div>
-        </div>
 
-        {/* STEP 1 */}
-        {step === 1 && (
-          <div className="bk-content">
-            <div className="bk-step-title">Ishtirokchilar soni</div>
-            <div className="bk-step-sub">Necha kishi uchun bron qilmoqdasiz?</div>
-            <div className="bk-people-counter">
-              <div className={`bk-counter-btn ${people<=1?'disabled':''}`} onClick={() => people>1 && handlePeopleChange(people-1)}>−</div>
-              <div className="bk-counter-value">{people}</div>
-              <div className={`bk-counter-btn ${people>=tour.max_people?'disabled':''}`} onClick={() => people<tour.max_people && handlePeopleChange(people+1)}>+</div>
-            </div>
-            <div className="bk-summary-box">
-              <div className="bk-summary-row">
-                <span className="bk-summary-label">1 kishi uchun</span>
-                <span className="bk-summary-value">{Number(tour.price).toLocaleString('uz-UZ')} so'm</span>
+          {/* Steps */}
+          <div className="bk-steps">
+            {STEPS.map((label, i) => (
+              <div key={i} style={{ display: 'contents' }}>
+                <div className={`bk-step ${step === i+1 ? 'active' : step > i+1 ? 'done' : ''}`}>
+                  <div className="bk-step-circle">{step > i+1 ? '✓' : i+1}</div>
+                  <span className="bk-step-label">{label}</span>
+                </div>
+                {i < STEPS.length-1 && (
+                  <div className={`bk-step-line ${step > i+1 ? 'done' : ''}`} />
+                )}
               </div>
-              <div className="bk-summary-row">
-                <span className="bk-summary-label">Ishtirokchilar</span>
-                <span className="bk-summary-value">{people} kishi</span>
-              </div>
+            ))}
+          </div>
 
-              <div className="bk-discount-box" onClick={() => setUseDiscount(!useDiscount)}>
-                <input 
-                  type="checkbox" 
-                  className="bk-discount-checkbox" 
-                  checked={useDiscount}
-                  onChange={(e) => setUseDiscount(e.target.checked)}
-                  onClick={(e) => e.stopPropagation()} 
-                />
-                <span className="bk-discount-text">Makon Club guruh a'zosiman</span>
-                <span className="bk-discount-badge">-50k so'm</span>
-              </div>
-
-              <div className="bk-summary-row" style={{marginTop: '12px', borderTop: '1px dashed #2A2A35', paddingTop: '12px'}}>
-                <span className="bk-summary-label">Jami</span>
-                <span className="bk-summary-total">{finalTotal.toLocaleString('uz-UZ')} so'm</span>
-              </div>
+          {/* Tour mini card */}
+          <div className="bk-tour-card">
+            {imageUrl ? <img src={imageUrl} alt={tour.title} className="bk-tour-img" /> : <div className="bk-tour-placeholder">🏔</div>}
+            <div>
+              <div className="bk-tour-name">{tour.title}</div>
+              <div className="bk-tour-price">{Number(tour.price).toLocaleString('uz-UZ')} so'm / kishi</div>
             </div>
           </div>
-        )}
 
-        {/* STEP 2 */}
-        {step === 2 && (
-          <div className="bk-content">
-            <div className="bk-step-title">Ishtirokchilar ma'lumotlari</div>
-            <div className="bk-step-sub">Har bir yo'lovchining ism va telefon raqamini kiriting</div>
-            <div className="bk-form">
-              {passengers.map((passenger, index) => (
-                <div key={index} className="bk-passenger-card">
-                  <div className="bk-passenger-number">
-                    {index === 0 ? "👤 Asosiy buyurtmachi (Siz)" : `👥 Yo'lovchi #${index + 1}`}
+          {/* STEP 1 */}
+          {step === 1 && (
+            <div className="bk-content">
+              <div>
+                <div className="bk-step-title">Ishtirokchilar soni</div>
+                <div className="bk-step-sub">Necha kishi uchun bron qilmoqdasiz?</div>
+                <div className="bk-people-counter">
+                  <div className={`bk-counter-btn ${people<=1?'disabled':''}`} onClick={() => people>1 && handlePeopleChange(people-1)}>−</div>
+                  <div className="bk-counter-value">{people}</div>
+                  <div className={`bk-counter-btn ${people>=tour.max_people?'disabled':''}`} onClick={() => people<tour.max_people && handlePeopleChange(people+1)}>+</div>
+                </div>
+              </div>
+              
+              <div className="bk-summary-box">
+                <div className="bk-summary-row">
+                  <span className="bk-summary-label">1 kishi uchun</span>
+                  <span className="bk-summary-value">{Number(tour.price).toLocaleString('uz-UZ')} so'm</span>
+                </div>
+                <div className="bk-summary-row">
+                  <span className="bk-summary-label">Ishtirokchilar</span>
+                  <span className="bk-summary-value">{people} kishi</span>
+                </div>
+
+                <div className="bk-discount-box" onClick={() => setUseDiscount(!useDiscount)}>
+                  <input 
+                    type="checkbox" 
+                    className="bk-discount-checkbox" 
+                    checked={useDiscount}
+                    onChange={(e) => setUseDiscount(e.target.checked)}
+                    onClick={(e) => e.stopPropagation()} 
+                  />
+                  <span className="bk-discount-text">Makon Club guruh a'zosiman</span>
+                  <span className="bk-discount-badge">-50k so'm</span>
+                </div>
+
+                <div className="bk-summary-row" style={{marginTop: '12px', borderTop: '1px dashed #2A2A35', paddingTop: '12px'}}>
+                  <span className="bk-summary-label">Jami</span>
+                  <span className="bk-summary-total">{finalTotal.toLocaleString('uz-UZ')} so'm</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 2 */}
+          {step === 2 && (
+            <div className="bk-content">
+              <div>
+                <div className="bk-step-title">Ishtirokchilar ma'lumotlari</div>
+                <div className="bk-step-sub">Har bir yo'lovchining ism va telefon raqamini kiriting</div>
+                <div className="bk-form">
+                  {passengers.map((passenger, index) => (
+                    <div key={index} className="bk-passenger-card">
+                      <div className="bk-passenger-number">
+                        {index === 0 ? "👤 Asosiy buyurtmachi (Siz)" : `👥 Yo'lovchi #${index + 1}`}
+                      </div>
+                      
+                      <div className="bk-field" style={{ marginBottom: '10px' }}>
+                        <input 
+                          className="bk-input" 
+                          placeholder="Ismi (Majburiy)" 
+                          value={passenger.first_name || ""} 
+                          onChange={e => handlePassengerInput(index, 'first_name', e.target.value)} 
+                          required
+                        />
+                      </div>
+
+                      <div className="bk-field" style={{ marginBottom: '10px' }}>
+                        <input 
+                          className="bk-input" 
+                          placeholder="Familiyasi (Majburiy)" 
+                          value={passenger.last_name || ""} 
+                          onChange={e => handlePassengerInput(index, 'last_name', e.target.value)} 
+                          required
+                        />
+                      </div>
+
+                      <div className="bk-field">
+                        <input 
+                          className="bk-input" 
+                          placeholder="+998 (90) 999 99 99" 
+                          value={passenger.phone_number || ""} 
+                          onChange={e => handlePassengerInput(index, 'phone_number', e.target.value)} 
+                          onKeyDown={e => {
+                            const { selectionStart, value } = e.target;
+                            if (selectionStart < 5 && (e.key === 'Backspace' || e.key === 'Delete')) {
+                              e.preventDefault();
+                              return;
+                            }
+                            if (e.key === 'Backspace') {
+                              const charToDelete = value[selectionStart - 1];
+                              if (charToDelete === ' ' || charToDelete === ')') {
+                                e.preventDefault();
+                                let skipCount = charToDelete === ' ' && value[selectionStart - 2] === ')' ? 2 : 1;
+                                let leftPart = value.substring(0, selectionStart - skipCount).replace(/\d$/, '');
+                                let rightPart = value.substring(selectionStart);
+                                handlePassengerInput(index, 'phone_number', leftPart + rightPart);
+                              }
+                            }
+                          }}
+                          maxLength={19}
+                          type="tel" 
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 3 */}
+          {step === 3 && (
+            <div className="bk-content">
+              <div>
+                <div className="bk-step-title">Ma'lumotlarni tekshiring</div>
+                <div className="bk-step-sub">Hamma narsa to'g'rimi?</div>
+                <div className="bk-confirm-list">
+                  <div className="bk-confirm-item">
+                    <div className="bk-confirm-icon">🌍</div>
+                    <div>
+                      <div className="bk-confirm-label">Tur</div>
+                      <div className="bk-confirm-value">{tour.title}</div>
+                    </div>
+                  </div>
+                  <div className="bk-confirm-item">
+                    <div className="bk-confirm-icon">👥</div>
+                    <div>
+                      <div className="bk-confirm-label">Ishtirokchilar soni</div>
+                      <div className="bk-confirm-value">{people} kishi</div>
+                    </div>
                   </div>
                   
-                  <div className="bk-field" style={{ marginBottom: '10px' }}>
-                    <input 
-                      className="bk-input" 
-                      placeholder="Ismi (Majburiy)" 
-                      value={passenger.first_name || ""} 
-                      onChange={e => handlePassengerInput(index, 'first_name', e.target.value)} 
-                      required
-                    />
-                  </div>
-
-                  <div className="bk-field" style={{ marginBottom: '10px' }}>
-                    <input 
-                      className="bk-input" 
-                      placeholder="Familiyasi (Majburiy)" 
-                      value={passenger.last_name || ""} 
-                      onChange={e => handlePassengerInput(index, 'last_name', e.target.value)} 
-                      required
-                    />
-                  </div>
-
-                  <div className="bk-field">
-                    <input 
-                      className="bk-input" 
-                      placeholder="+998 (90) 999 99 99" 
-                      value={passenger.phone_number || ""} 
-                      onChange={e => handlePassengerInput(index, 'phone_number', e.target.value)} 
-                      onKeyDown={e => {
-                        const { selectionStart, value } = e.target;
-                        if (selectionStart < 5 && (e.key === 'Backspace' || e.key === 'Delete')) {
-                          e.preventDefault();
-                          return;
-                        }
-                        if (e.key === 'Backspace') {
-                          const charToDelete = value[selectionStart - 1];
-                          if (charToDelete === ' ' || charToDelete === ')') {
-                            e.preventDefault();
-                            let skipCount = charToDelete === ' ' && value[selectionStart - 2] === ')' ? 2 : 1;
-                            let leftPart = value.substring(0, selectionStart - skipCount).replace(/\d$/, '');
-                            let rightPart = value.substring(selectionStart);
-                            handlePassengerInput(index, 'phone_number', leftPart + rightPart);
-                          }
-                        }
-                      }}
-                      maxLength={19}
-                      type="tel" 
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* STEP 3 */}
-        {step === 3 && (
-          <div className="bk-content">
-            <div className="bk-step-title">Ma'lumotlarni tekshiring</div>
-            <div className="bk-step-sub">Hamma narsa to'g'rimi?</div>
-            <div className="bk-confirm-list">
-              <div className="bk-confirm-item">
-                <div className="bk-confirm-icon">🌍</div>
-                <div>
-                  <div className="bk-confirm-label">Tur</div>
-                  <div className="bk-confirm-value">{tour.title}</div>
+                  {useDiscount && (
+                    <div className="bk-confirm-item" style={{borderColor: 'rgba(200,169,110,0.4)', background: 'rgba(200,169,110,0.03)'}}>
+                      <div className="bk-confirm-icon">🔥</div>
+                      <div>
+                        <div className="bk-confirm-label">Klub chegirmasi</div>
+                        <div className="bk-confirm-value" style={{color: '#C8A96E'}}>Faollashtirilgan (-50,000 so'm)</div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {passengers.map((p, idx) => (
+                    <div key={idx} className="bk-confirm-item" style={{borderLeft: '2px solid #C8A96E'}}>
+                      <div className="bk-confirm-icon">👤</div>
+                      <div>
+                        <div className="bk-confirm-label">
+                          {idx === 0 ? "Asosiy buyurtmachi (Siz)" : `Yo'lovchi #${idx + 1}`}
+                        </div>
+                        <div className="bk-confirm-value">
+                          {p.first_name || ''} {p.last_name || ''}
+                        </div>
+                        <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', marginTop: '2px' }}>
+                          {p.phone_number}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div className="bk-confirm-item">
-                <div className="bk-confirm-icon">👥</div>
-                <div>
-                  <div className="bk-confirm-label">Ishtirokchilar soni</div>
-                  <div className="bk-confirm-value">{people} kishi</div>
+              <div>
+                <div className="bk-total-box" style={{position: 'sticky', top: '20px'}}>
+                  <span className="bk-total-label">Umumiy to'lov</span>
+                  <span className="bk-total-value">{finalTotal.toLocaleString('uz-UZ')} so'm</span>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* STEP 4 */}
+          {step === 4 && (
+            <div className="bk-content" style={{display: 'block'}}>
+              <div className="bk-payment-title">To'lov usulini tanlang</div>
+              <div className="bk-payment-sub">Qaysi to'lov usuli sizga mos keladi?</div>
+              <div className="bk-payment-amount">
+                <div className="bk-payment-amount-label">To'lov miqdori</div>
+                <div className="bk-payment-amount-value">{finalTotal.toLocaleString('uz-UZ')} so'm</div>
+              </div>
               
-              {useDiscount && (
-                <div className="bk-confirm-item" style={{borderColor: 'rgba(200,169,110,0.4)', background: 'rgba(200,169,110,0.03)'}}>
-                  <div className="bk-confirm-icon">🔥</div>
-                  <div>
-                    <div className="bk-confirm-label">Klub chegirmasi</div>
-                    <div className="bk-confirm-value" style={{color: '#C8A96E'}}>Faollashtirilgan (-50,000 so'm)</div>
+              <div className="bk-payment-methods">
+                <button className="bk-pay-btn" onClick={() => handlePayment('click')}>
+                  <div className="bk-pay-logo click">CLICK</div>
+                  <div className="bk-pay-info">
+                    <div className="bk-pay-name">Click App</div>
+                    <div className="bk-pay-desc">Click tizimi orqali tezkor to'lov</div>
                   </div>
-                </div>
-              )}
-              
-          
-              {passengers.map((p, idx) => (
-                <div key={idx} className="bk-confirm-item" style={{borderLeft: '2px solid #C8A96E'}}>
-                  <div className="bk-confirm-icon">👤</div>
-                  <div>
-                    <div className="bk-confirm-label">
-                      {idx === 0 ? "Asosiy buyurtmachi (Siz)" : `Yo'lovchi #${idx + 1}`}
-                    </div>
-                    <div className="bk-confirm-value">
-                      {p.first_name || ''} {p.last_name || ''}
-                    </div>
-                    <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', marginTop: '2px' }}>
-                      {p.phone_number}
-                    </div>
+                </                button>
+
+                <button className="bk-pay-btn" onClick={() => handlePayment('payme')}>
+                  <div className="bk-pay-logo payme">PAYME</div>
+                  <div className="bk-pay-info">
+                    <div className="bk-pay-name">Payme App</div>
+                    <div className="bk-pay-desc">Payme tizimi orqali xavfsiz to'lov</div>
                   </div>
-                </div>
-              ))}
-            </div>
-            <div className="bk-total-box">
-              <span className="bk-total-label">Umumiy to'lov</span>
-              <span className="bk-total-value">{finalTotal.toLocaleString('uz-UZ')} so'm</span>
-            </div>
-          </div>
-        )}
+                </button>
+              </div>
 
-        {/* STEP 4 */}
-        {step === 4 && (
-          <div className="bk-content">
-            <div className="bk-payment-title">To'lov usulini tanlang</div>
-            <div className="bk-payment-sub">Qaysi to'lov usuli sizga mos keladi?</div>
-            <div className="bk-payment-amount">
-              <div className="bk-payment-amount-label">To'lov miqdori</div>
-              <div className="bk-payment-amount-value">{finalTotal.toLocaleString('uz-UZ')} so'm</div>
+              <div className="bk-sim-divider">Yoki real to'lovni simulyatsiya qiling</div>
+              <div style={{maxWidth: '400px', margin: '0 auto'}}>
+                <button className="bk-sim-btn" onClick={() => handleSimulate('click')}>⚙️ Click To'lovni Simulyatsiya Qilish</button>
+                <button className="bk-sim-btn" style={{marginTop:'10px'}} onClick={() => handleSimulate('payme')}>⚙️ Payme To'lovni Simulyatsiya Qilish</button>
+              </div>
             </div>
-            
-            <div className="bk-payment-methods">
-              <button className="bk-pay-btn" onClick={() => handlePayment('click')}>
-                <div className="bk-pay-logo click">CLICK</div>
-                <div className="bk-pay-info">
-                  <div className="bk-pay-name">Click App</div>
-                  <div className="bk-pay-desc">Click tizimi orqali tezkor to'lov</div>
-                </div>
-              </button>
+          )}
 
-              <button className="bk-pay-btn" onClick={() => handlePayment('payme')}>
-                <div className="bk-pay-logo payme">PAYME</div>
-                <div className="bk-pay-info">
-                  <div className="bk-pay-name">Payme App</div>
-                  <div className="bk-pay-desc">Payme tizimi orqali xavfsiz to'lov</div>
-                </div>
-              </button>
-            </div>
-
-            <div className="bk-sim-divider">Yoki real to'lovni simulyatsiya qiling</div>
-            <button className="bk-sim-btn" onClick={() => handleSimulate('click')}>⚙️ Click To'lovni Simulyatsiya Qilish</button>
-            <button className="bk-sim-btn" style={{marginTop:'10px'}} onClick={() => handleSimulate('payme')}>⚙️ Payme To'lovni Simulyatsiya Qilish</button>
-          </div>
-        )}
+        </div> 
 
         {/* Dynamic Footer for Steps */}
         {step < 4 && (
