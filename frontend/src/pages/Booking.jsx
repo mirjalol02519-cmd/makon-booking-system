@@ -4,11 +4,6 @@ import { getTourDetail } from '../api';
 import axios from 'axios';
 import { getApiUrl, getImageUrl } from '../config';
 
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { getTourDetail } from '../api';
-import axios from 'axios';
-import { getApiUrl, getImageUrl } from '../config';
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap');
